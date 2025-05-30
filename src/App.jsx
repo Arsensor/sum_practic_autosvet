@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import {useState} from 'react';
 import './App.css';
-import { Routes, Route, Link, useParams, useNavigate, useLocation } from 'react-router-dom';
+import {Routes, Route, Link, useParams, useNavigate} from 'react-router-dom';
 
 const CATEGORIES = [
   { key: 'all', label: 'Все' },
@@ -94,12 +94,11 @@ const popularProducts = [
 function Header({ cartCount }) {
   const navigate = useNavigate();
   return (
-    <header className="header">
+    <header className="header" style={{marginTop: 24}}>
       <div className="container" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
         <div className="header__left">
-          <span className="logo">АвтоСвет</span>
+          <span className="logo" style={{cursor: 'pointer'}} onClick={() => navigate('/')}>АвтоСвет</span>
           <nav className="nav">
-            <Link to="/" className="nav__link">Главная</Link>
             <Link to="/catalog" className="nav__link">Каталог товаров</Link>
             <Link to="/about" className="nav__link">О компании</Link>
           </nav>
@@ -136,14 +135,13 @@ function Main() {
         <section className="hero">
           <div className="hero__bg" />
           <div className="hero__content">
-            <h1 className="hero__title">Улучшии свою оптику</h1>
+            <h1 className="hero__title">Улучши свою оптику</h1>
             <p className="hero__desc">Улучшение света на вашем автомобиле, при помощи качественных компонентов премиальной линейки линз, задних фонарей и противотуманных фар.</p>
-            <button className="hero__btn">Приобрести</button>
           </div>
         </section>
         <section className="section">
           <h2 className="section__title">Новые товары</h2>
-          <div className="products-row" style={{ justifyContent: 'center' }}>
+          <div className="products-row" style={{ justifyContent: 'center', flexWrap: 'nowrap', overflowX: 'auto' }}>
             {newProducts.map(product => (
               <ProductCard key={product.id} title={product.title} />
             ))}
@@ -151,7 +149,7 @@ function Main() {
         </section>
         <section className="section">
           <h2 className="section__title">Популярные товары</h2>
-          <div className="products-row" style={{ justifyContent: 'center' }}>
+          <div className="products-row" style={{ justifyContent: 'center', flexWrap: 'nowrap', overflowX: 'auto' }}>
             {popularProducts.map(product => (
               <ProductCard key={product.id} title={product.title} />
             ))}
@@ -162,34 +160,37 @@ function Main() {
   );
 }
 
-function Catalog({ onAddToCart }) {
+function Catalog() {
   const [filter, setFilter] = useState('all');
   const navigate = useNavigate();
   const filtered = filter === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.category === filter);
-
   return (
     <main className="main">
-      <div className="catalog-title">Оптика</div>
-      <div className="catalog-filters">
-        {CATEGORIES.map(cat => (
-          <button
-            key={cat.key}
-            className={`catalog-filter-btn${filter === cat.key ? ' active' : ''}`}
-            onClick={() => setFilter(cat.key)}
-          >
-            {cat.label}
-          </button>
-        ))}
-      </div>
-      <div className="catalog-grid">
-        {filtered.map(product => (
-          <ProductCard
-            key={product.id}
-            title={product.title}
-            price={product.price}
-            onClick={() => navigate(`/catalog/${product.id}`)}
-          />
-        ))}
+      <div className="container" style={{paddingLeft: 16, paddingRight: 16}}>
+        <div className="catalog-container" style={{marginBottom: 32}}>
+          <div className="catalog-title">Оптика</div>
+          <div className="catalog-filters">
+            {CATEGORIES.map(cat => (
+              <button
+                key={cat.key}
+                className={`catalog-filter-btn${filter === cat.key ? ' active' : ''}`}
+                onClick={() => setFilter(cat.key)}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+          <div className="catalog-grid">
+            {filtered.map(product => (
+              <ProductCard
+                key={product.id}
+                title={product.title}
+                price={product.price}
+                onClick={() => navigate(`/catalog/${product.id}`)}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </main>
   );
@@ -199,19 +200,10 @@ function ProductPage({ onAddToCart }) {
   const { id } = useParams();
   const product = PRODUCTS.find(p => p.id === Number(id));
   const otherProducts = PRODUCTS.filter(p => p.id !== Number(id)).slice(0, 4);
-
   if (!product) return <div style={{ color: '#fff', padding: 32 }}>Товар не найден</div>;
-
   return (
     <main className="main">
       <div className="product-page-card">
-        <div className="breadcrumbs">
-          <Link to="/" className="breadcrumbs__link">Главная</Link>
-          <span className="breadcrumbs__sep">/</span>
-          <Link to="/catalog" className="breadcrumbs__link">Каталог товаров</Link>
-          <span className="breadcrumbs__sep">/</span>
-          <span className="breadcrumbs__current">{product.category === 'front' ? 'Передняя оптика' : product.category === 'rear' ? 'Задние фонари' : 'Противотуманные фары'}</span>
-        </div>
         <div className="product-title">{product.title}</div>
         <div className="product-price-block">
           <span className="product-price-label">Цена: </span>
@@ -239,10 +231,9 @@ function ProductPage({ onAddToCart }) {
   );
 }
 
-function CartPage({ cart, onChangeQty, onRemove, onClear }) {
+function CartPage({cart, onChangeQty, onRemove}) {
   const navigate = useNavigate();
   const total = cart.reduce((sum, item) => sum + item.priceValue * item.qty, 0);
-
   return (
     <main className="main">
       <div className="container">
@@ -291,20 +282,16 @@ function CheckoutPage({ cart, onClear }) {
     payment: 'sbp',
   });
   const [submitting, setSubmitting] = useState(false);
-
   const total = cart.reduce((sum, item) => sum + item.priceValue * item.qty, 0);
-  const deliveryPrice = 0; // Можно добавить расчёт
+  const deliveryPrice = 0;
   const grandTotal = total + deliveryPrice;
-
   const handleChange = e => {
     const { name, value } = e.target;
     setForm(f => ({ ...f, [name]: value }));
   };
-
   const handleRadio = (name, value) => {
     setForm(f => ({ ...f, [name]: value }));
   };
-
   const handleSubmit = e => {
     e.preventDefault();
     setSubmitting(true);
@@ -315,15 +302,9 @@ function CheckoutPage({ cart, onClear }) {
       alert('Заказ успешно оформлен!');
     }, 1200);
   };
-
   return (
     <main className="main">
       <div className="container">
-        <div className="breadcrumbs">
-          <Link to="/cart" className="breadcrumbs__link">Корзина</Link>
-          <span className="breadcrumbs__sep">/</span>
-          <span className="breadcrumbs__current">Оформление заказа</span>
-        </div>
         <div className="checkout-title">Заказ</div>
         <form className="checkout-form" onSubmit={handleSubmit} autoComplete="off">
           <div className="checkout-fields">
@@ -421,14 +402,19 @@ function AboutPage() {
   return (
     <main className="main">
       <div className="container">
-        <div className="about-title">О компании</div>
-        <div className="about-desc">
-          Мы - команда профессионалов, увлеченных автосветом. Наша миссия - обеспечить вас качественными и надежными решениями для освещения вашего автомобиля. Мы предлагаем широкий ассортимент продукции от ведущих производителей, включая фары, лампы, противотуманные фары и многое другое. Наша цель - сделать ваш автомобиль ярче и безопаснее на дороге.
-        </div>
-        <div className="about-contacts-title">Контакты</div>
-        <div className="about-contacts">
-          Адрес: г. Барнаул, ул. Сизова, д. 14<br />
-          Юридическая информация: ООО "Автосвет", ИНН 771234567890, ОГРН 1234567890123
+        <div className="about-card">
+          <div className="about-title big">О компании</div>
+          <div className="about-desc">
+            Мы — команда профессионалов, увлечённых автосветом. Наша миссия — обеспечить вас качественными и надёжными решениями для освещения вашего автомобиля.<br /><br />
+            Мы предлагаем широкий ассортимент продукции от ведущих производителей: фары, лампы, противотуманные фары и многое другое. Наша цель — сделать ваш автомобиль ярче и безопаснее на дороге.
+          </div>
+          <div className="about-contacts-block">
+            <div className="about-contacts-title">Контакты</div>
+            <div className="about-contacts">
+              <span>Адрес: г. Барнаул, ул. Сизова, д. 14</span><br />
+              <span>Юридическая информация: ООО "Автосвет", ИНН 771234567890, ОГРН 1234567890123</span>
+            </div>
+          </div>
         </div>
       </div>
     </main>
@@ -447,7 +433,6 @@ function Footer() {
 
 export default function App() {
   const [cart, setCart] = useState([]);
-
   const handleAddToCart = (product) => {
     setCart(prev => {
       const found = prev.find(item => item.id === product.id);
@@ -457,17 +442,13 @@ export default function App() {
       return [...prev, { ...product, qty: 1 }];
     });
   };
-
   const handleChangeQty = (id, qty) => {
     setCart(prev => prev.map(item => item.id === id ? { ...item, qty: Math.max(1, qty) } : item));
   };
-
   const handleRemove = (id) => {
     setCart(prev => prev.filter(item => item.id !== id));
   };
-
   const handleClear = () => setCart([]);
-
   return (
     <div className="app">
       <Header cartCount={cart.reduce((sum, item) => sum + item.qty, 0)} />
