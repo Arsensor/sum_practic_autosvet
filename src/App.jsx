@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import { Routes, Route, Link, useParams, useNavigate } from 'react-router-dom';
+import { Routes, Route, Link, useParams, useNavigate, useLocation } from 'react-router-dom';
 
 const CATEGORIES = [
   { key: 'all', label: 'Все' },
@@ -14,6 +14,7 @@ const PRODUCTS = [
     id: 1,
     title: 'Передняя оптика BMW X5 E70 (Рест)',
     price: '80.000₽',
+    priceValue: 80000,
     category: 'front',
     image: '',
     description: 'Описание для передней оптики BMW X5 E70 (Рест).',
@@ -28,6 +29,7 @@ const PRODUCTS = [
     id: 2,
     title: 'Противотуманные фары Subaru Forester',
     price: '8500₽',
+    priceValue: 8500,
     category: 'fog',
     image: '',
     description: 'Описание для противотуманных фар Subaru Forester.',
@@ -42,6 +44,7 @@ const PRODUCTS = [
     id: 3,
     title: 'Задний фонарь Subaru Impreza WRX/STI/XV Crosstrek LED',
     price: '6900₽',
+    priceValue: 6900,
     category: 'rear',
     image: '',
     description: 'Для Subaru Impreza и XV Crosstrek, поскольку отверстие для заднего фонаря на бампере не было открыто полностью, вы не сможете использовать металлический кронштейн, поставляемый в комплекте, вместо этого вам придется изготовить несколько прокладок, чтобы равномерно расположить этот светодиодный задний противотуманный фонарь в отверстии для заднего противотуманного фонаря.',
@@ -55,7 +58,16 @@ const PRODUCTS = [
   { id: 4, title: 'Передняя оптика Mercedes-Benz C217', price: '150.000₽', category: 'front' },
   { id: 5, title: 'Передняя оптика Mercedes-Benz W204', price: '55.000₽', category: 'front' },
   { id: 6, title: 'Передняя оптика Mercedes-Benz V167', price: '189.000₽', category: 'front' },
-  { id: 7, title: 'Поворотники ChargeSpeed Subaru WRX/Forester/Levorg', price: '17.500₽', category: 'front' },
+  {
+    id: 7,
+    title: 'Поворотники ChargeSpeed Subaru WRX/Forester/Levorg',
+    price: '17.500₽',
+    priceValue: 17500,
+    category: 'front',
+    image: '',
+    description: '',
+    features: {},
+  },
   { id: 8, title: 'Передняя оптика Mercedes-Benz S212', price: '67.000₽', category: 'front' },
   { id: 9, title: 'Задние фонари BMW 5-Series F10 (Рест)', price: '25.000₽', category: 'rear' },
   { id: 10, title: 'Передняя оптика Mercedes-Benz W222', price: '125.000₽', category: 'front' },
@@ -79,7 +91,8 @@ const popularProducts = [
   { id: 6, title: 'Противотуманные фары на Subaru Forester SH' },
 ];
 
-function Header() {
+function Header({ cartCount }) {
+  const navigate = useNavigate();
   return (
     <header className="header">
       <div className="header__left">
@@ -95,8 +108,9 @@ function Header() {
           <span className="search__icon" />
           <input className="search__input" placeholder="Поиск" />
         </div>
-        <div className="cart">
+        <div className="cart" onClick={() => navigate('/cart')} style={{ cursor: 'pointer', position: 'relative' }}>
           <span className="cart__icon" />
+          {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
         </div>
       </div>
     </header>
@@ -144,7 +158,7 @@ function Main() {
   );
 }
 
-function Catalog() {
+function Catalog({ onAddToCart }) {
   const [filter, setFilter] = useState('all');
   const navigate = useNavigate();
   const filtered = filter === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.category === filter);
@@ -177,7 +191,7 @@ function Catalog() {
   );
 }
 
-function ProductPage() {
+function ProductPage({ onAddToCart }) {
   const { id } = useParams();
   const product = PRODUCTS.find(p => p.id === Number(id));
   const otherProducts = PRODUCTS.filter(p => p.id !== Number(id)).slice(0, 4);
@@ -200,12 +214,12 @@ function ProductPage() {
       <div className="product-price-block">
         <span className="product-price-label">Цена: </span>
         <span className="product-price-value">{product.price}</span>
-        <button className="product-cart-btn">В корзину</button>
+        <button className="product-cart-btn" onClick={() => onAddToCart(product)}>В корзину</button>
       </div>
       <div className="product-description">{product.description}</div>
       <div className="product-features-title">Характеристики</div>
       <div className="product-features">
-        {Object.entries(product.features).map(([key, value]) => (
+        {product.features && Object.entries(product.features).map(([key, value]) => (
           <div className="product-feature-row" key={key}>
             <div className="product-feature-key">{key}</div>
             <div className="product-feature-value">{value}</div>
@@ -222,6 +236,43 @@ function ProductPage() {
   );
 }
 
+function CartPage({ cart, onChangeQty, onRemove, onClear }) {
+  const navigate = useNavigate();
+  const total = cart.reduce((sum, item) => sum + item.priceValue * item.qty, 0);
+
+  return (
+    <main className="main">
+      <div className="cart-title">Корзина</div>
+      {cart.length === 0 ? (
+        <div style={{ color: '#fff', margin: '32px 0' }}>Корзина пуста</div>
+      ) : (
+        <>
+          {cart.map(item => (
+            <div className="cart-row" key={item.id}>
+              <div className="cart-row-img" />
+              <div className="cart-row-info">
+                <div className="cart-row-title">{item.title}</div>
+                <div className="cart-row-price">{item.price}</div>
+              </div>
+              <div className="cart-row-qty">
+                <button className="cart-qty-btn" onClick={() => onChangeQty(item.id, item.qty - 1)} disabled={item.qty <= 1}>-</button>
+                <span className="cart-qty-value">{item.qty}</span>
+                <button className="cart-qty-btn" onClick={() => onChangeQty(item.id, item.qty + 1)}>+</button>
+              </div>
+              <button className="cart-row-remove" onClick={() => onRemove(item.id)} title="Удалить">×</button>
+            </div>
+          ))}
+          <div className="cart-total-label">Итого</div>
+          <div className="cart-total-value">{total.toLocaleString('ru-RU')}₽</div>
+          <div className="cart-order-btn-block">
+            <button className="cart-order-btn" onClick={() => { onClear(); navigate('/'); }}>Оформить заказ</button>
+          </div>
+        </>
+      )}
+    </main>
+  );
+}
+
 function Footer() {
   return (
     <footer className="footer">
@@ -233,13 +284,36 @@ function Footer() {
 }
 
 export default function App() {
+  const [cart, setCart] = useState([]);
+
+  const handleAddToCart = (product) => {
+    setCart(prev => {
+      const found = prev.find(item => item.id === product.id);
+      if (found) {
+        return prev.map(item => item.id === product.id ? { ...item, qty: item.qty + 1 } : item);
+      }
+      return [...prev, { ...product, qty: 1 }];
+    });
+  };
+
+  const handleChangeQty = (id, qty) => {
+    setCart(prev => prev.map(item => item.id === id ? { ...item, qty: Math.max(1, qty) } : item));
+  };
+
+  const handleRemove = (id) => {
+    setCart(prev => prev.filter(item => item.id !== id));
+  };
+
+  const handleClear = () => setCart([]);
+
   return (
     <div className="app">
-      <Header />
+      <Header cartCount={cart.reduce((sum, item) => sum + item.qty, 0)} />
       <Routes>
         <Route path="/" element={<Main />} />
-        <Route path="/catalog" element={<Catalog />} />
-        <Route path="/catalog/:id" element={<ProductPage />} />
+        <Route path="/catalog" element={<Catalog onAddToCart={handleAddToCart} />} />
+        <Route path="/catalog/:id" element={<ProductPage onAddToCart={handleAddToCart} />} />
+        <Route path="/cart" element={<CartPage cart={cart} onChangeQty={handleChangeQty} onRemove={handleRemove} onClear={handleClear} />} />
       </Routes>
       <Footer />
     </div>
