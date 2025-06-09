@@ -1,4 +1,4 @@
-import ProductCard from './ProductCard';
+import { CardProduct } from '../components/CardProduct';
 
 const newProducts = [
   { id: 1, title: 'Передняя оптика Multibeam на Mercedes-Benz GLE V167 (Рестайлинг)' },
@@ -27,7 +27,7 @@ export default function MainPage() {
           <h2 className="section__title">Новые товары</h2>
           <div className="products-row" style={{ justifyContent: 'center', flexWrap: 'nowrap', overflowX: 'auto' }}>
             {newProducts.map(product => (
-              <ProductCard key={product.id} title={product.title} />
+              <CardProduct key={product.id} title={product.title} />
             ))}
           </div>
         </section>
@@ -35,7 +35,7 @@ export default function MainPage() {
           <h2 className="section__title">Популярные товары</h2>
           <div className="products-row" style={{ justifyContent: 'center', flexWrap: 'nowrap', overflowX: 'auto' }}>
             {popularProducts.map(product => (
-              <ProductCard key={product.id} title={product.title} />
+              <CardProduct key={product.id} title={product.title} />
             ))}
           </div>
         </section>

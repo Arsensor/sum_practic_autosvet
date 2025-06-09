@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import ProductCard from './ProductCard';
 import {PRODUCTS, CATEGORIES} from '../data';
 import {useNavigate} from 'react-router-dom';
+import { CardProduct } from '../components/CardProduct';
 
 export default function CatalogPage() {
   const [filter, setFilter] = useState('all');
@@ -26,7 +26,7 @@ export default function CatalogPage() {
           </div>
           <div className="catalog-grid">
             {filtered.map(product => (
-              <ProductCard
+              <CardProduct
                 key={product.id}
                 title={product.title}
                 price={product.price}
