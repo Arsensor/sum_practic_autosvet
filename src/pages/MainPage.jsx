@@ -1,18 +1,32 @@
-import { CardProduct } from '../components/CardProduct';
-
-const newProducts = [
-  { id: 1, title: 'Передняя оптика Multibeam на Mercedes-Benz GLE V167 (Рестайлинг)' },
-  { id: 2, title: 'Задние фонари на BMW M5 F90 (Рестайлинг)' },
-  { id: 3, title: 'Противотуманные фары универсальные' },
-];
-
-const popularProducts = [
-  { id: 4, title: 'Передняя оптика на BMW X5 E70 (Рестайлинг)' },
-  { id: 5, title: 'Задние фонари на BMW 5-series F10' },
-  { id: 6, title: 'Противотуманные фары на Subaru Forester SH' },
-];
+import {useState, useEffect} from 'react';
+import ProductCard from './ProductCard';
+import {fetchProducts} from '../api';
 
 export default function MainPage() {
+  const [newProducts, setNewProducts] = useState([]);
+  const [popularProducts, setPopularProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const products = await fetchProducts();
+        setNewProducts(products.slice(-3));
+        setPopularProducts(products.slice(0, 3));
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  if (loading) return <div style={{color: '#fff', padding: 32}}>Загрузка...</div>;
+  if (error) return <div style={{color: '#fff', padding: 32}}>Ошибка: {error}</div>;
+
   return (
     <main className="main">
       <div className="container">
@@ -25,17 +39,27 @@ export default function MainPage() {
         </section>
         <section className="section">
           <h2 className="section__title">Новые товары</h2>
-          <div className="products-row" style={{ justifyContent: 'center', flexWrap: 'nowrap', overflowX: 'auto' }}>
+          <div className="products-row">
             {newProducts.map(product => (
-              <CardProduct key={product.id} title={product.title} />
+              <ProductCard 
+                key={product.id} 
+                title={product.title} 
+                price={product.price} 
+                image={product.image}
+              />
             ))}
           </div>
         </section>
         <section className="section">
           <h2 className="section__title">Популярные товары</h2>
-          <div className="products-row" style={{ justifyContent: 'center', flexWrap: 'nowrap', overflowX: 'auto' }}>
+          <div className="products-row">
             {popularProducts.map(product => (
-              <CardProduct key={product.id} title={product.title} />
+              <ProductCard 
+                key={product.id} 
+                title={product.title} 
+                price={product.price} 
+                image={product.image}
+              />
             ))}
           </div>
         </section>

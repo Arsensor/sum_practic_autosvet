@@ -1,12 +1,38 @@
-import { useState } from 'react';
-import {PRODUCTS, CATEGORIES} from '../data';
+import {useState, useEffect} from 'react';
+import ProductCard from './ProductCard';
 import {useNavigate} from 'react-router-dom';
-import { CardProduct } from '../components/CardProduct';
+import {fetchProducts, fetchCategories} from '../api';
 
 export default function CatalogPage() {
   const [filter, setFilter] = useState('all');
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const filtered = filter === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.category === filter);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const [productsData, categoriesData] = await Promise.all([
+          fetchProducts(),
+          fetchCategories()
+        ]);
+        setProducts(productsData);
+        setCategories(categoriesData);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, []);
+
+  const filtered = filter === 'all' ? products : products.filter(p => p.category === filter);
+
+  if (loading) return <div style={{color: '#fff', padding: 32}}>Загрузка...</div>;
+  if (error) return <div style={{color: '#fff', padding: 32}}>Ошибка: {error}</div>;
 
   return (
     <main className="main">
@@ -14,7 +40,7 @@ export default function CatalogPage() {
         <div className="catalog-container" style={{marginBottom: 32}}>
           <div className="catalog-title">Оптика</div>
           <div className="catalog-filters">
-            {CATEGORIES.map(cat => (
+            {categories.map(cat => (
               <button
                 key={cat.key}
                 className={`catalog-filter-btn${filter === cat.key ? ' active' : ''}`}
@@ -26,10 +52,11 @@ export default function CatalogPage() {
           </div>
           <div className="catalog-grid">
             {filtered.map(product => (
-              <CardProduct
+              <ProductCard
                 key={product.id}
                 title={product.title}
                 price={product.price}
+                image={product.image}
                 onClick={() => navigate(`/catalog/${product.id}`)}
               />
             ))}
@@ -38,4 +65,4 @@ export default function CatalogPage() {
       </div>
     </main>
   );
-} 
+}

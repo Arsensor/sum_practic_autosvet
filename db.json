@@ -1,0 +1,251 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "title": "Передняя оптика BMW X5 E70 (Рест)",
+      "price": "80.000₽",
+      "priceValue": 80000,
+      "category": "front",
+      "image": "9m9cdknx1hx3bk2o7xf58j747lqtg1s2.jpg",
+      "description": "Описание для передней оптики BMW X5 E70 (Рест).",
+      "features": {
+        "Линзы": "Диодные",
+        "Цвет": "Кристально прозрачный",
+        "Вольтаж": "12V",
+        "Гарантия": "3 года"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Противотуманные фары Subaru Forester",
+      "price": "8500₽",
+      "priceValue": 8500,
+      "category": "fog",
+      "image": "1534952345778_bulletin.jpg",
+      "description": "Описание для противотуманных фар Subaru Forester.",
+      "features": {
+        "Лампы": "2 штуки",
+        "Цвет": "Кристально прозрачный",
+        "Вольтаж": "12V",
+        "Гарантия": "2 года"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Задний фонарь Subaru Impreza WRX/STI/XV Crosstrek LED",
+      "price": "6900₽",
+      "priceValue": 6900,
+      "category": "rear",
+      "image": "api14i44f__96523.jpg",
+      "description": "Описание для заднего фонаря Subaru Impreza WRX/STI/XV Crosstrek LED.",
+      "features": {
+        "Светодиоды": "12 штук",
+        "Цвет": "Кристально прозрачный",
+        "Вольтаж": "12V",
+        "Гарантия": "2 года"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Задние фонари BMW 5-Series E34 (Рест)",
+      "price": "25.000₽",
+      "priceValue": 25000,
+      "category": "rear",
+      "image": "e34_rest_taillight.jpg",
+      "description": "Задние фонари для BMW 5-Series E34 (Рест). Высокое качество, яркий свет.",
+      "features": {
+        "Лампы": "Галогеновые",
+        "Цвет": "Кристально прозрачный",
+        "Вольтаж": "12V",
+        "Гарантия": "5 лет"
+      }
+    },
+    {
+      "id": 5,
+      "title": "Передняя оптика Mercedes-Benz W204",
+      "price": "55.000₽",
+      "priceValue": 55000,
+      "category": "front",
+      "image": "s-l225.jpg",
+      "description": "Передняя оптика для Mercedes-Benz W204. Высокое качество, яркий свет.",
+      "features": {
+        "Линзы": "Диодные",
+        "Цвет": "Кристально прозрачный",
+        "Вольтаж": "12V",
+        "Гарантия": "7 лет"
+      }
+    },
+    {
+      "id": 6,
+      "title": "Передняя оптика Mercedes-Benz V167",
+      "price": "189.000₽",
+      "priceValue": 189000,
+      "category": "front",
+      "image": "19_24_mercedes_benz_sprinter_luxx_series_led_projector_headlights_black_666297_263-500x400.jpg",
+      "description": "Передняя оптика для Mercedes-Benz V167. Высокое качество, яркий свет.",
+      "features": {
+        "Линзы": "Диодные",
+        "Цвет": "Кристально прозрачный",
+        "Вольтаж": "12V",
+        "Гарантия": "5 лет"
+      }
+    },
+    {
+      "id": 7,
+      "title": "Поворотники ChargeSpeed Subaru WRX/Forester/Levorg",
+      "price": "17.500₽",
+      "priceValue": 17500,
+      "category": "front",
+      "image": "images.jpg",
+      "description": "Поворотники ChargeSpeed для Subaru WRX/Forester/Levorg. Современный дизайн.",
+      "features": {
+        "Светодиоды": "48 штук",
+        "Цвет": "Кристально прозрачный",
+        "Вольтаж": "12V",
+        "Гарантия": "3 года"
+      }
+    },
+    {
+      "id": 8,
+      "title": "Передняя оптика Mercedes-Benz S212",
+      "price": "67.000₽",
+      "priceValue": 67000,
+      "category": "front",
+      "image": "s212_headlights.jpeg",
+      "description": "Передняя оптика для Mercedes-Benz S212. Высокое качество, яркий свет.",
+      "features": {
+        "Линзы": "Диодные",
+        "Цвет": "Кристально прозрачный",
+        "Вольтаж": "12V",
+        "Гарантия": "10 лет"
+      }
+    },
+    {
+      "id": 9,
+      "title": "Задние фонари BMW 5-Series F10 (Рест)",
+      "price": "25.000₽",
+      "priceValue": 25000,
+      "category": "rear",
+      "image": "3682-202308311346224239.jpg",
+      "description": "Задние фонари для BMW 5-Series F10. Современный дизайн.",
+      "features": {
+        "Стоп-сигнал": "Светодиодный",
+        "Цвет": "Кристально прозрачный",
+        "Вольтаж": "12V",
+        "Гарантия": "2 года"
+      }
+    },
+    {
+      "id": 10,
+      "title": "Передняя оптика Mercedes-Benz W222",
+      "price": "125.000₽",
+      "priceValue": 125000,
+      "category": "front",
+      "image": "S61f3425aa8d54da58e8b360c8009b2f0x.jpg_640x640.webp",
+      "description": "Передняя оптика для Mercedes-Benz W222. Высокое качество, яркий свет.",
+      "features": {
+        "Линзы": "Диодные",
+        "Цвет": "Кристально прозрачный",
+        "Вольтаж": "12V",
+        "Гарантия": "8 лет"
+      }
+    },
+    {
+      "id": 11,
+      "title": "Противотуманные фары универсальные",
+      "price": "5500₽",
+      "priceValue": 5500,
+      "category": "fog",
+      "image": "GY019004_2.jpg",
+      "description": "Универсальные противотуманные фары. Подходят для большинства автомобилей.",
+      "features": {
+        "Лампы": "Галогеновые",
+        "Цвет": "Кристально прозрачный",
+        "Вольтаж": "12V",
+        "Гарантия": "2 года"
+      }
+    },
+    {
+      "id": 12,
+      "title": "Задние фонари Subaru XV",
+      "price": "18.500₽",
+      "priceValue": 18500,
+      "category": "rear",
+      "image": "Sb3234959f67e43c08c440c2f8913f5d1g.jpg_480x480.jpg",
+      "description": "Задние фонари для Subaru XV. Современный дизайн.",
+      "features": {
+        "Светодиоды": "12 штук",
+        "Цвет": "Кристально прозрачный",
+        "Вольтаж": "12V",
+        "Гарантия": "3 года"
+      }
+    },
+    {
+      "id": 13,
+      "title": "Передняя оптика Lada Priora 2",
+      "price": "25.000₽",
+      "priceValue": 25000,
+      "category": "front",
+      "image": "72722.970.jpg",
+      "description": "Передняя оптика для Lada Priora 2. Высокое качество, яркий свет.",
+      "features": {
+        "Линзы": "Диодные",
+        "Цвет": "Кристально прозрачный",
+        "Вольтаж": "12V",
+        "Гарантия": "2 года"
+      }
+    },
+    {
+      "id": 14,
+      "title": "Передняя оптика Renaul Duster (Рест)",
+      "price": "36.000₽",
+      "priceValue": 36000,
+      "category": "front",
+      "image": "duster_headlights.jpg",
+      "description": "Передняя оптика для Renault Duster. Высокое качество, яркий свет.",
+      "features": {
+        "Лампы": "Галогеновые",
+        "Цвет": "Кристально прозрачный",
+        "Вольтаж": "12V",
+        "Гарантия": "2 года"
+      }
+    },
+    {
+      "id": 15,
+      "title": "Задние фонари Mercedes-Benz W140",
+      "price": "15.000₽",
+      "priceValue": 15000,
+      "category": "rear",
+      "image": "w140_taillight.jpg",
+      "description": "Задние фонари для Mercedes-Benz W140. Современный дизайн.",
+      "features": {
+        "Светодиоды": "36 штук",
+        "Цвет": "Кристально прозрачный",
+        "Вольтаж": "12V",
+        "Гарантия": "2 года"
+      }
+    },
+    {
+      "id": 16,
+      "title": "Передняя оптика Ford Focus 3",
+      "price": "45.000₽",
+      "priceValue": 45000,
+      "category": "front",
+      "image": "orig.jpg",
+      "description": "Передняя оптика для Ford Focus 3. Высокое качество, яркий свет.",
+      "features": {
+        "Линзы": "Диодные",
+        "Светодиоды": "12 штук",
+        "Цвет": "Кристально прозрачный",
+        "Вольтаж": "12V",
+        "Гарантия": "2 года"
+      }
+    }
+  ],
+  "categories": [
+    { "key": "all", "label": "Все" },
+    { "key": "front", "label": "Передняя оптика" },
+    { "key": "rear", "label": "Задние фонари" },
+    { "key": "fog", "label": "Противотуманные фары" }
+  ]
+} 

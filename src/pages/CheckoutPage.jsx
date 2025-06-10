@@ -1,6 +1,9 @@
 import {useState} from 'react';
+import {sendOrderNotification} from '../api';
+import {useCart} from '../context/CartContext.jsx';
 
-export default function CheckoutPage({ cart, onClear }) {
+export default function CheckoutPage() {
+  const {cart, handleClear} = useCart();
   const [form, setForm] = useState({
     email: '',
     phone: '',
@@ -12,35 +15,43 @@ export default function CheckoutPage({ cart, onClear }) {
     payment: 'sbp',
   });
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
 
-  const total = cart.reduce((sum, item) => sum + item.priceValue * item.qty, 0);
-  const deliveryPrice = 0;
-  const grandTotal = total + deliveryPrice;
-
-  const handleChange = e => {
-    const { name, value } = e.target;
-    setForm(f => ({ ...f, [name]: value }));
+  const deliveryCost = form.delivery === 'post' ? 300 : 500; // Примерные стоимости доставки
+  const subtotal = cart.reduce((sum, item) => sum + item.priceValue * item.qty, 0);
+  const grandTotal = subtotal + deliveryCost;
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
-
   const handleRadio = (name, value) => {
-    setForm(f => ({ ...f, [name]: value }));
+    setForm({ ...form, [name]: value });
   };
-
-  const handleSubmit = e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
     setSubmitting(true);
-    setTimeout(() => {
-      setSubmitting(false);
-      onClear();
-      window.location.href = '/';
+    try {
+      const orderData = {
+        ...form,
+        cart: cart.map(item => ({id: item.id, title: item.title, qty: item.qty, price: item.price})),
+        total: grandTotal,
+      };
+      await sendOrderNotification(orderData);
+      handleClear();
       alert('Заказ успешно оформлен!');
-    }, 1200);
+    } catch (err) {
+      setError('Не удалось отправить уведомление о заказе. Пожалуйста, попробуйте еще раз.');
+      console.error('Ошибка отправки уведомления:', err);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
     <main className="main">
       <div className="container">
         <div className="checkout-title">Заказ</div>
+        {error && <div style={{ color: '#e74c3c', marginBottom: 16 }}>{error}</div>}
         <form className="checkout-form" onSubmit={handleSubmit} autoComplete="off">
           <div className="checkout-fields">
             <div className="checkout-field">
@@ -61,7 +72,7 @@ export default function CheckoutPage({ cart, onClear }) {
             </div>
             <div className="checkout-row">
               <div className="checkout-field half">
-                <label>Облать/Край</label>
+                <label>Область/Край</label>
                 <input name="region" value={form.region} onChange={handleChange} className="checkout-input" required />
               </div>
               <div className="checkout-field half">
@@ -99,36 +110,45 @@ export default function CheckoutPage({ cart, onClear }) {
             </label>
           </div>
           <div className="checkout-section-title">Итоговый заказ</div>
-          <div className="checkout-order-list">
-            {cart.map(item => (
-              <div className="checkout-order-row" key={item.id}>
-                <div className="checkout-order-img" />
-                <div className="checkout-order-info">
-                  <div className="checkout-order-title">{item.qty} x {item.title}</div>
-                  <div className="checkout-order-price">{item.price}</div>
-                </div>
-              </div>
-            ))}
-          </div>
+          {cart.length === 0 ? (
+            <div style={{ color: '#fff', marginBottom: 16 }}>Корзина пуста</div>
+          ) : (
+            <div className="checkout-order-list">
+              {cart.map(item => {
+                const imageUrl = item.image.startsWith('http') ? item.image : `/images/products/${item.image}`;
+                return (
+                  <div className="checkout-order-row" key={item.id}>
+                    <div className="checkout-order-img" style={{ backgroundImage: `url(${imageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+                    <div className="checkout-order-info">
+                      <div className="checkout-order-title">{item.title} x {item.qty}</div>
+                      <div className="checkout-order-price">{item.price}</div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
           <div className="checkout-summary">
             <div className="checkout-summary-row">
-              <span>Сумма товаров</span>
-              <span>{total.toLocaleString('ru-RU')}₽</span>
+              <span>Промежуточная сумма:</span>
+              <span>{subtotal.toLocaleString('ru-RU')}₽</span>
             </div>
             <div className="checkout-summary-row">
-              <span>Доставка</span>
-              <span>{deliveryPrice ? deliveryPrice + '₽' : '0₽'}</span>
+              <span>Доставка:</span>
+              <span>{deliveryCost.toLocaleString('ru-RU')}₽</span>
             </div>
-            <div className="checkout-summary-row">
-              <span>Итого</span>
+            <div className="checkout-summary-row" style={{ fontWeight: 'bold' }}>
+              <span>Всего:</span>
               <span>{grandTotal.toLocaleString('ru-RU')}₽</span>
             </div>
           </div>
           <div className="checkout-btn-block">
-            <button className="checkout-btn" type="submit" disabled={submitting}>{submitting ? 'Оплата...' : 'Оплатить'}</button>
+            <button type="submit" className="cart-order-btn" disabled={submitting}>
+              {submitting ? 'Отправка...' : 'Оформить заказ'}
+            </button>
           </div>
         </form>
       </div>
     </main>
   );
-} 
+}
