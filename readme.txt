@@ -32,6 +32,11 @@
 
 -Запуск проекта:
 
+3. Установка React-Router-Dom:
+"npm install react-router-dom"
+
+-Запуск проекта:
+
 1. Запуск json-server
 
 Для запуска локального API-сервера выполните:
@@ -64,3 +69,7 @@ autosvet_shop/
 - `POST http://localhost:3000/products` - создание нового товара;
 - `PUT http://localhost:3000/products/:id` - обновление товара;
 - `DELETE http://localhost:3000/products/:id` - удаление товара.
+
+-Ссылки:
+1. Макет проекта - "https://www.figma.com/design/1KrLKRJ4Tjs3OVx6sOuYjI/Summer_Practic_AvtoSvet?node-id=0-1&t=NgRJl16eVKGv0uJG-1"
+2. Файлы проекта - "https://github.com/Arsensor/sum_practic_autosvet"
