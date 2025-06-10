@@ -16,12 +16,32 @@ export default function CheckoutPage() {
   });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
-
-  const deliveryCost = form.delivery === 'post' ? 300 : 500; // Примерные стоимости доставки
+  const [validationErrors, setValidationErrors] = useState({});
+  const deliveryCost = form.delivery === 'post' ? 300 : 500; //Примерные стоимости доставки
   const subtotal = cart.reduce((sum, item) => sum + item.priceValue * item.qty, 0);
   const grandTotal = subtotal + deliveryCost;
+  const validatePhone = (phone) => {
+    const phoneRegex = /^\+?[78][-\(]?\d{3}\)?-?\d{3}-?\d{2}-?\d{2}$/;
+    return phoneRegex.test(phone);
+  };
+  const validateZip = (zip) => {
+    const zipRegex = /^\d{6}$/;
+    return zipRegex.test(zip);
+  };
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+    if (name === 'phone') {
+      setValidationErrors(prev => ({
+        ...prev,
+        phone: validatePhone(value) ? '' : 'Введите корректный номер телефона'
+      }));
+    } else if (name === 'zip') {
+      setValidationErrors(prev => ({
+        ...prev,
+        zip: validateZip(value) ? '' : 'Почтовый индекс должен состоять из 6 цифр'
+      }));
+    }
   };
   const handleRadio = (name, value) => {
     setForm({ ...form, [name]: value });
@@ -29,11 +49,20 @@ export default function CheckoutPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+    const phoneError = !validatePhone(form.phone);
+    const zipError = !validateZip(form.zip);
+    if (phoneError || zipError) {
+      setValidationErrors({
+        phone: phoneError ? 'Введите корректный номер телефона' : '',
+        zip: zipError ? 'Почтовый индекс должен состоять из 6 цифр' : ''
+      });
+      return;
+    }
     setSubmitting(true);
     try {
       const orderData = {
         ...form,
-        cart: cart.map(item => ({id: item.id, title: item.title, qty: item.qty, price: item.price})),
+        cart: cart.map(item => ({ id: item.id, title: item.title, qty: item.qty, price: item.price })),
         total: grandTotal,
       };
       await sendOrderNotification(orderData);
@@ -60,7 +89,19 @@ export default function CheckoutPage() {
             </div>
             <div className="checkout-field">
               <label>Контактный телефон</label>
-              <input name="phone" value={form.phone} onChange={handleChange} className="checkout-input" required />
+              <input 
+                name="phone" 
+                value={form.phone} 
+                onChange={handleChange} 
+                className="checkout-input" 
+                required 
+                placeholder="+7 (XXX) XXX-XX-XX"
+              />
+              {validationErrors.phone && (
+                <div style={{ color: '#e74c3c', fontSize: '0.8em', marginTop: '4px' }}>
+                  {validationErrors.phone}
+                </div>
+              )}
             </div>
             <div className="checkout-field">
               <label>Адрес</label>
@@ -77,7 +118,19 @@ export default function CheckoutPage() {
               </div>
               <div className="checkout-field half">
                 <label>Почтовый индекс</label>
-                <input name="zip" value={form.zip} onChange={handleChange} className="checkout-input" required />
+                <input 
+                  name="zip" 
+                  value={form.zip} 
+                  onChange={handleChange} 
+                  className="checkout-input" 
+                  required 
+                  placeholder="XXXXXX"
+                />
+                {validationErrors.zip && (
+                  <div style={{ color: '#e74c3c', fontSize: '0.8em', marginTop: '4px' }}>
+                    {validationErrors.zip}
+                  </div>
+                )}
               </div>
             </div>
           </div>

@@ -5,7 +5,7 @@ const TELEGRAM_CHAT_ID = '754681671'; // ID Чата
 export const fetchProducts = async () => {
   const response = await fetch(`${API_URL}/products`);
   if (!response.ok) {
-    throw new Error('Failed to fetch products');
+    throw new Error('Ошибка переноса товаров');
   }
   return response.json();
 };
@@ -13,7 +13,7 @@ export const fetchProducts = async () => {
 export const fetchProduct = async (id) => {
   const response = await fetch(`${API_URL}/products/${id}`);
   if (!response.ok) {
-    throw new Error('Failed to fetch product');
+    throw new Error('Ошибка переноса товара');
   }
   return response.json();
 };
@@ -21,7 +21,7 @@ export const fetchProduct = async (id) => {
 export const fetchCategories = async () => {
   const response = await fetch(`${API_URL}/categories`);
   if (!response.ok) {
-    throw new Error('Failed to fetch categories');
+    throw new Error('Ошибка переноса категорий');
   }
   return response.json();
 };
@@ -58,7 +58,7 @@ ${orderData.cart.map(item => `- ${item.title} (${item.qty} шт.) - ${item.price
     }),
   });
   if (!response.ok) {
-    throw new Error('Failed to send Telegram notification');
+    throw new Error('Ошибка отправки заказа в Telergam');
   }
   return response.json();
 };

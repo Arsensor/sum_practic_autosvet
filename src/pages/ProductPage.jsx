@@ -10,7 +10,6 @@ export default function ProductPage() {
   const [otherProducts, setOtherProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   const {handleAddToCart} = useCart();
 
   useEffect(() => {
